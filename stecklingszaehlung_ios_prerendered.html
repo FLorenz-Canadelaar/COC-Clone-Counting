@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="de" class="no-js">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>COC – Stecklingszählung</title>
+  <style>
+    :root{ --brand:#E87722; --bg:#fff7f0; --txt:#1a1a1a; --muted:#666; --card:#ffffff; --border:#ccc; --radius:16px; }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;color:var(--txt);background:var(--bg)}
+    header{background:var(--brand);color:#fff;padding:10px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10}
+    .wrap{max-width:960px;margin:18px auto;padding:0 16px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 6px 24px rgba(0,0,0,.05)}
+    .grid{display:grid;gap:12px}
+    .grid.cols{grid-template-columns:1fr 1fr}
+    label{font-size:14px;color:var(--muted)}
+    input[type=text],input[type=number]{width:100%;padding:12px;border:1.5px solid #b5b5b5;border-radius:10px;background:#fff;font-size:16px}
+    input[type=text]:focus,input[type=number]:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(232,119,34,.18);outline:none}
+    table{width:100%;border-collapse:separate;border-spacing:0 8px}
+    th,td{padding:8px 12px}
+    th{font-size:12px;color:var(--muted);text-align:left}
+    tr{background:#fff;border:1px solid var(--border)}
+    tr td:first-child,tr th:first-child{border-top-left-radius:10px;border-bottom-left-radius:10px}
+    tr td:last-child,tr th:last-child{border-top-right-radius:10px;border-bottom-right-radius:10px}
+    .qty input{width:140px}
+    .search-wrapper{position:relative;margin-bottom:12px}
+    .search-wrapper svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:18px;height:18px;fill:#999}
+    #search{padding-left:40px;border:2px solid var(--border);border-radius:12px}
+    .primary{background:var(--brand);color:#fff;border:none;border-radius:12px;padding:12px 16px;font-weight:600;font-size:16px;cursor:pointer}
+    .js-warning{display:none;margin:8px 0 0;font-size:12px;color:#a00}
+    .no-js .js-warning{display:block}
+  </style>
+  <noscript><style>.js-only{display:none}</style></noscript>
+</head>
+<body>
+<header><div style="font-weight:800">COC</div><div><div style="font-weight:700">Stecklingszählung</div><div style="font-size:12px;color:#eee">Offline-fähige Mini-App</div></div></header>
+<main class="wrap grid" style="gap:16px">
+  <section class="card">
+    <div class="grid cols" style="align-items:end">
+      <div><label for="satz">Satznummer</label><input id="satz" type="text" placeholder="z. B. S-2025-09-04-001"></div>
+      <div><label for="datum">Datum</label><input id="datum" type="date"></div>
+    </div>
+    <div class="grid cols" style="margin-top:8px;align-items:end">
+      <div><label for="bearbeiter">Mitarbeiter*in (optional)</label><input id="bearbeiter" type="text" placeholder="Name oder Kürzel"></div>
+      <div><label for="bemerkung">Bemerkung (optional)</label><input id="bemerkung" type="text" placeholder="z. B. Zwischenzählung, Raum A"></div>
+    </div>
+    <p class="js-warning">Hinweis: Öffne die Datei in **Safari** (nicht in der Vorschau/WhatsApp). Tippe auf das Teilen-Symbol → „In Safari öffnen“. JavaScript ist sonst evtl. blockiert.</p>
+  </section>
+
+  <section class="card">
+    <div class="search-wrapper js-only">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.53 20.47l-4.82-4.82A7.92 7.92 0 0018 10a8 8 0 10-8 8 7.92 7.92 0 005.65-1.29l4.82 4.82a.75.75 0 101.06-1.06zM4.5 10a5.5 5.5 0 1111 0 5.5 5.5 0 01-11 0z"/></svg>
+      <input id="search" type="text" placeholder="Sorte suchen…">
+    </div>
+
+    <!-- Statisch vorgerenderte Tabelle (sichtbar auch ohne JS) -->
+    <div id="sortenTableWrap">
+      <table id="sortenTable">
+        <thead><tr><th>Sorte</th><th>Menge</th></tr></thead>
+        <tbody>
+          <tr><td>Amnesia Core Cut</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Amnesia Core Cut"></td></tr>
+<tr><td>AK47</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="AK47"></td></tr>
+<tr><td>Amnesia</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Amnesia"></td></tr>
+<tr><td>Atomic</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Atomic"></td></tr>
+<tr><td>Banana Monkey</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Banana Monkey"></td></tr>
+<tr><td>Birkinz Migos</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Birkinz Migos"></td></tr>
+<tr><td>Biscotti Mintz</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Biscotti Mintz"></td></tr>
+<tr><td>Bushmans</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Bushmans"></td></tr>
+<tr><td>Cannalope Haze</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Cannalope Haze"></td></tr>
+<tr><td>Chem Flyer</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Chem Flyer"></td></tr>
+<tr><td>Colombian Gold</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Colombian Gold"></td></tr>
+<tr><td>Crostata</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Crostata"></td></tr>
+<tr><td>Gelato 45</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Gelato 45"></td></tr>
+<tr><td>Gorilla Glue #4</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Gorilla Glue #4"></td></tr>
+<tr><td>Grapes & Creme</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Grapes & Creme"></td></tr>
+<tr><td>JMO x Garlic</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="JMO x Garlic"></td></tr>
+<tr><td>Ice Creme Cake</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Ice Creme Cake"></td></tr>
+<tr><td>Ice Creme Runz</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Ice Creme Runz"></td></tr>
+<tr><td>Imperium X</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Imperium X"></td></tr>
+<tr><td>Jokerz 31</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Jokerz 31"></td></tr>
+<tr><td>Kush Crasher</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Kush Crasher"></td></tr>
+<tr><td>Lilac Cookies</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Lilac Cookies"></td></tr>
+<tr><td>Lemon Zkittle</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Lemon Zkittle"></td></tr>
+<tr><td>Marshmallow OG</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Marshmallow OG"></td></tr>
+<tr><td>Mimosa x Orange Punch</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Mimosa x Orange Punch"></td></tr>
+<tr><td>Northern Lights</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Northern Lights"></td></tr>
+<tr><td>Power Plant</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Power Plant"></td></tr>
+<tr><td>Pure Michigan</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Pure Michigan"></td></tr>
+<tr><td>Sherb Creme Pie</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Sherb Creme Pie"></td></tr>
+<tr><td>Sleepy Joe</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Sleepy Joe"></td></tr>
+<tr><td>Super Orange Glue</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Super Orange Glue"></td></tr>
+<tr><td>Trüffel Cake</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Trüffel Cake"></td></tr>
+<tr><td>Wappa</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Wappa"></td></tr>
+<tr><td>White Russian</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="White Russian"></td></tr>
+<tr><td>Zombie Kush</td><td class="qty"><input type="number" min="0" value="0" class="sorte-qty" data-sorte="Zombie Kush"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card"><button class="primary" id="btnSave">Speichern & CSV herunterladen</button></section>
+</main>
+
+<script>
+// Deactivate no-js mode if JS runs
+document.documentElement.className = document.documentElement.className.replace('no-js','');
+
+// ES5-only JS for iOS compatibility
+function filterRows(q){
+  var f = (q || '').toLowerCase();
+  var tbody = document.querySelector('#sortenTable tbody');
+  if(!tbody) return;
+  var trs = tbody.getElementsByTagName('tr');
+  for (var i=0;i<trs.length;i++){
+    var name = trs[i].getElementsByTagName('td')[0].textContent || '';
+    var show = !f || name.toLowerCase().indexOf(f) !== -1;
+    trs[i].style.display = show ? '' : 'none';
+  }
+}
+
+var search = document.getElementById('search');
+if (search) {
+  search.addEventListener('input', function(e){ filterRows(e.target.value); });
+}
+
+var d = document.getElementById('datum'); if (d) d.value = new Date().toISOString().slice(0,10);
+
+document.getElementById('btnSave').onclick = function(){
+  var satz = document.getElementById('satz').value.trim();
+  if(!satz){ alert('Bitte Satznummer eingeben'); return; }
+  var datumVal = document.getElementById('datum').value || new Date().toISOString().slice(0,10);
+  var bearb = document.getElementById('bearbeiter').value || '';
+  var bemerk = document.getElementById('bemerkung').value || '';
+
+  var rows = [];
+  var tbody = document.querySelector('#sortenTable tbody');
+  var trs = tbody ? tbody.getElementsByTagName('tr') : [];
+  for (var i=0;i<trs.length;i++){
+    var tds = trs[i].getElementsByTagName('td');
+    var name = tds[0].textContent;
+    var inp = tds[1].getElementsByTagName('input')[0];
+    var qty = inp && inp.value ? Number(inp.value) : 0;
+    rows.push({Datum:datumVal,Satznummer:satz,Mitarbeiter:bearb,Bemerkung:bemerk,Sorte:name,Menge:qty});
+  }
+
+  if(rows.length){
+    var header = Object.keys(rows[0]);
+    var esc = function(v){ var s=(v==null?'':String(v)).replace(/"/g,'""'); return /[";,\n]/.test(s)?'"'+s+'"':s; };
+    var out = [header.join(';')];
+    for(var r=0;r<rows.length;r++){ var line=[]; for(var h=0;h<header.length;h++){ line.push(esc(rows[r][header[h]])); } out.push(line.join(';')); }
+    var blob = new Blob([out.join('\n')], {type:'text/csv;charset=utf-8;'});
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Stecklingszaehlung_'+satz+'.csv'; a.click(); URL.revokeObjectURL(a.href);
+  }
+};
+</script>
+</body>
+</html>
